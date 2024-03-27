@@ -1,0 +1,72 @@
+package generateInfoFiles;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Random;
+
+public class GenerateInfoFiles {
+	
+	// Método para crear un archivo con información de vendedores
+    public static void createSalesmanInfoFile(int salesmanCount, String filename) {
+        try (FileWriter writer = new FileWriter(filename)) {
+            for (int i = 0; i < salesmanCount; i++) {
+                String tipoDocumento = "CC"; // Cédula de Ciudadanía
+                long numeroDocumento = 1000000000L + new Random().nextInt(1000000000);
+                String nombres = generateRandomName();
+                String apellidos = generateRandomLastName();
+                writer.write(tipoDocumento + ";" + numeroDocumento + ";" + nombres + ";" + apellidos + "\n");
+            }
+            System.out.println("Archivo de información de vendedores generado exitosamente: " + filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Método para crear un archivo con información de productos
+    public static void createProductsFile(int productsCount, String filename) {
+        try (FileWriter writer = new FileWriter(filename)) {
+            for (int i = 0; i < productsCount; i++) {
+                String id = "IDProducto" + (i + 1);
+                String nombre = "Producto" + (i + 1);
+                double precio = 1 + (1000 - 1) * new Random().nextDouble(); // Precio aleatorio entre 1 y 1000
+                writer.write(id + ";" + nombre + ";" + precio + "\n");
+            }
+            System.out.println("Archivo de información de productos generado exitosamente: " + filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Método para crear un archivo de ventas de un vendedor
+    public static void createSalesmanSalesFile(int randomSalesCount, String name, long id, String filename) {
+        try (FileWriter writer = new FileWriter(filename)) {
+            for (int i = 0; i < randomSalesCount; i++) {
+                String productoId = "IDProducto" + (1 + new Random().nextInt(10));
+                int cantidad = 1 + new Random().nextInt(10);
+                writer.write(id + ";" + productoId + "," + cantidad + "\n");
+            }
+            System.out.println("Archivo de ventas de " + name + " generado exitosamente: " + filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Método para generar un nombre aleatorio
+    private static String generateRandomName() {
+        String[] names = {"Juan", "Pedro", "María", "Ana", "Luis", "Carlos", "Andrea", "Laura", "Jorge", "Sofía"};
+        return names[new Random().nextInt(names.length)];
+    }
+
+    // Método para generar un apellido aleatorio
+    private static String generateRandomLastName() {
+        String[] lastNames = {"González", "Rodríguez", "Gómez", "Martínez", "Fernández", "López", "Díaz", "Pérez", "García", "Sánchez"};
+        return lastNames[new Random().nextInt(lastNames.length)];
+    }
+
+	public static void main(String[] args) {
+		 // Generar archivos de prueba
+        createSalesmanInfoFile(10, "info_vendedores.txt");
+        createProductsFile(10, "info_productos.txt");
+        createSalesmanSalesFile(5, "Vendedor1", 1234567890, "ventas_vendedor1.txt");
+    }
+
+}
